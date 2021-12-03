@@ -9,7 +9,7 @@
 				(map  #(int  %)) 
 				(map #(- 48 %))  ;; thats also not very nice
 				(map #(* -1 %))
-				(partition 12)  ;; unfortunately not equal for test and real input
+				(partition 5 )  ;; unfortunately not equal for test and real input
 				(into []))) ;; what does this?
 
 (def test-input (get-input "test-input"))
@@ -20,7 +20,7 @@
 		(fn [[sums len] bits]
 			[ (mapv + sums bits) (inc len)]
 		)
-		[ [0 0 0 0 0 0 0 0 0 0 0 0] 0]
+		[ [0 0 0 0 0] 0]
 		bit-list))
 
 (defn divide-by [sum-len]
@@ -43,6 +43,17 @@
 (defn mult-inv [bits]
 	(* (to-binary bits) (to-binary (invert bits))))
 
+(defn filter-pos [pos numberlist template-gen]
+	
+	(if (= 1 (count numberlist)) 
+		numberlist
+		(filter-pos
+			(inc pos)
+			(filterv #( = (nth % pos) (nth (template-gen numberlist) pos)) numberlist) 
+			template-gen
+		)
+	)	
+)
 
 (defn task-1 [input]
 			(->> input
@@ -52,4 +63,30 @@
 					(mult-inv)
 ))
 
-(println (task-1 input))
+(println (task-1 test-input))
+
+(defn most [numbers]
+		(->> numbers
+				(sum-len)
+				(divide-by)
+				;(round-all)
+		)
+)
+
+(def oxy 
+		(->> (filter-pos 0 test-input most)
+				(first)
+				(to-binary)
+		)
+)
+
+(def co2 
+		(->> (filter-pos 0 test-input (invert most))
+				(first)
+				(to-binary)
+		)
+)
+
+
+(println oxy)
+(println co2)
