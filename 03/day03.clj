@@ -7,9 +7,9 @@
 				(map sequence)
 				(flatten) ;; flatten/partitio is either a very elegant or awkward workaround 
 				(map  #(int  %)) 
-				(map #(- 48 %))
+				(map #(- 48 %))  ;; thats also not very nice
 				(map #(* -1 %))
-				(partition 5)
+				(partition 12)  ;; unfortunately not equal for test and real input
 				(into []))) ;; what does this?
 
 (def test-input (get-input "test-input"))
@@ -18,9 +18,9 @@
 (defn sum-len [bit-list] 
 	(reduce
 		(fn [[sums len] bits]
-			[ (map + sums bits) (inc len)]
+			[ (mapv + sums bits) (inc len)]
 		)
-		[ [0 0 0 0 0] 0]
+		[ [0 0 0 0 0 0 0 0 0 0 0 0] 0]
 		bit-list))
 
 (defn divide-by [sum-len]
@@ -52,4 +52,4 @@
 					(mult-inv)
 ))
 
-(println (task-1 test-input))
+(println (task-1 input))
